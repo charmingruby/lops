@@ -3,8 +3,8 @@ package config
 import "github.com/caarlos0/env"
 
 type Config struct {
+	DummySecret    string `env:"DUMMY_SECRET,required"`
 	RestServerPort string `env:"REST_SERVER_PORT,required"`
-	PostgresURL    string `env:"POSTGRES_URL"`
 	LogLevel       string `env:"LOG_LEVEL"`
 }
 

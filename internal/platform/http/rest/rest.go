@@ -1,13 +1,11 @@
 package rest
 
 import (
-	"github.com/charmingruby/pack/internal/platform/http/rest/endpoint"
-	"github.com/charmingruby/pack/pkg/database/postgres"
+	"github.com/charmingruby/lops/internal/platform/http/rest/endpoint"
 
 	"github.com/gin-gonic/gin"
 )
 
-func New(r *gin.Engine, db *postgres.Client,
-) {
-	endpoint.New(r, db)
+func New(r *gin.Engine) {
+	endpoint.New(r)
 }
