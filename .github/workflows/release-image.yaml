@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  IMAGE_NAME: lops
+  IMAGE_NAME: charmingruby/lops
 
 jobs:
   release-image:
