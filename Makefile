@@ -1,5 +1,13 @@
-.PHONY: create-cluster
-create-cluster:
+CLUSTER_NAME:=lops
+
+.PHONY: setup-cluster
+setup-cluster:
 	@echo "creating cluster..."
-	kind create cluster --name lops-cluster --config ./k8s/clusters/dev/kind-config.yaml
+	kind create cluster --name $(CLUSTER_NAME) --config ./deploy/clusters/dev/kind-config.yaml
 	@echo "cluster created successfully"
+
+.PHONY: teardown-cluster
+teardown-cluster:
+	@echo "deleting cluster..."
+	kind delete cluster --name $(CLUSTER_NAME)
+	@echo "cluster deleted successfully"
