@@ -1,5 +1,4 @@
 CLUSTER_NAME?=lops
-ENV?=local
 
 .PHONY: setup-cluster
 setup-cluster: create-cluster apply-manifests
@@ -13,12 +12,12 @@ teardown-cluster:
 .PHONY: create-cluster
 create-cluster:
 	@echo "creating cluster..."
-	kind create cluster --name $(CLUSTER_NAME) --config ./deploy/clusters/local/kind-config.yaml
+	kind create cluster --name $(CLUSTER_NAME) --config ./deploy/clusters/kind-config.yaml
 	@echo "cluster deleted successfully"
 
 .PHONY: apply-manifests
 apply-manifests:
 	@echo "applying manifests..."
-	helm template base deploy/apps/base -f deploy/apps/lops/overlays/$(ENV)/values.yaml > deploy/apps/lops/overlays/$(ENV)/gen.yaml
+	helm template base deploy/apps/base -f deploy/apps/lops/values.yaml > deploy/apps/lops/gen.yaml
 	kubectl apply -k ./deploy
 	@echo "manifests applied successfully"

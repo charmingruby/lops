@@ -3,7 +3,6 @@ package config
 import "github.com/caarlos0/env"
 
 type Config struct {
-	DummySecret    string `env:"DUMMY_SECRET,required"`
 	RestServerPort string `env:"REST_SERVER_PORT,required"`
 	LogLevel       string `env:"LOG_LEVEL"`
 }

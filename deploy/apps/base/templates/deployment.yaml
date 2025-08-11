@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "base.fullname" . }}
+  name: {{ .Values.appName }}-deployment
   labels:
     {{- include "base.metadata" . | nindent 4 }}
 spec:
@@ -35,6 +35,11 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          {{- if .Values.config.hasConfigMap }}
+          envFrom:
+              - configMapRef:
+                  name: {{ include "config.configMapName" .Values.appName | quote }}
+          {{- end }}    
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

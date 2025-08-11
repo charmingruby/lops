@@ -56,3 +56,11 @@ app_type: {{ .Values.appType }}
 team: {{ .Values.team }}
 environment: {{ .Values.environment }}
 {{- end }}
+
+
+{{/*
+Configs map resource name
+*/}}
+{{- define "config.configMapName" -}}
+{{- printf "%s-config-map" . -}}
+{{- end -}}

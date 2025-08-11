@@ -32,8 +32,6 @@ func main() {
 
 	log.Info("environment variables loaded")
 
-	log.Debug("dummy secret identifier", "keyword", cfg.DummySecret)
-
 	logLevel := logger.ChangeLevel(cfg.LogLevel)
 
 	log.Info("log level configured", "level", logLevel)
