@@ -54,7 +54,6 @@ Selector labels
 app_name: {{ .Values.appName }}
 app_type: {{ .Values.appType }}
 team: {{ .Values.team }}
-environment: {{ .Values.environment }}
 {{- end }}
 
 

@@ -68,7 +68,6 @@ autoscaling:
 appName: "lops"
 appType: "api"
 team: "platform"
-environment: "local"
 
 # This sections is for config
 config:

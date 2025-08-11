@@ -4,7 +4,6 @@ nameOverride: "lops"
 appName: "lops"
 appType: "api"
 team: "platform"
-environment: "local"
 
 podLabels:
 
