@@ -6,3 +6,6 @@ tmp
 
 # todo
 TODO.md
+
+# helm generated files
+gen.yaml
