@@ -1,4 +1,5 @@
 CLUSTER_NAME:=lops
+ENV := local
 
 .PHONY: setup-cluster
 setup-cluster:
@@ -7,7 +8,7 @@ setup-cluster:
 	@echo "cluster created successfully"
 	@echo "applying manifests..."
 	kubectl apply -k ./deploy
-	@echo "manifesteds applied successfully"
+	@echo "manifests applied successfully"
 
 .PHONY: teardown-cluster
 teardown-cluster:
