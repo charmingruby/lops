@@ -1,28 +1,25 @@
-replicaCount: 3
+fullnameOverride: "lops"
+nameOverride: "lops"
+
+appName: "lops"
+appType: "api"
+team: "platform"
+environment: "local"
+
+podLabels:
+
+replicaCount: 1
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
 
 image:
   repository: "charmingruby/lops"
   tag: "latest"
-  pullPolicy: "IfNotPresent"
+  pullPolicy: "Always"
 
 service:
   port: 3000
-
-podLabels:
-  environment: "production"
-  team: "backend"
-
-securityContext:
-  runAsUser: 1000
-  runAsGroup: 3000
-  fsGroup: 2000
-  allowPrivilegeEscalation: false
 
 livenessProbe:
   httpGet:
