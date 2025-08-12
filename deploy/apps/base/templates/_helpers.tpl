@@ -32,7 +32,7 @@ Common labels
 Selector labels
 */}}
 {{- define "base.selectorLabels" -}}
-{{ include "base.governanceLabels" }}
+{{ include "base.governanceLabels" . }}
 {{- end }}
 
 {{/*
