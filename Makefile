@@ -8,7 +8,7 @@ teardown-cluster:
 	@echo "deleting cluster..."
 	kind delete cluster --name $(CLUSTER_NAME)
 	@echo "cluster deleted successfully"
- j
+
 .PHONY: create-cluster 
 create-cluster:
 	@echo "creating cluster..."
