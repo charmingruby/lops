@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: {{ .Values.appName }}-config-map
+    name: {{ .Values.governanceData.appName }}-config-map
 data: 
 {{ toYaml .Values.config.configMapData | nindent 2 }}
 {{- end }}

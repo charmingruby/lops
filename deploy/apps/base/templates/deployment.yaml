@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName }}-deployment
+  name: {{ .Values.nameOverride }}-deployment
   labels:
     {{- include "base.metadata" . | nindent 4 }}
 spec:
@@ -38,7 +38,7 @@ spec:
           {{- if .Values.config.hasConfigMap }}
           envFrom:
               - configMapRef:
-                  name: {{ include "config.configMapName" .Values.appName | quote }}
+                  name: {{ include "config.configMapName" .Values.governanceData.appName | quote }}
           {{- end }}    
           {{- with .Values.livenessProbe }}
           livenessProbe:

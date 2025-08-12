@@ -13,7 +13,7 @@ teardown-cluster:
 create-cluster:
 	@echo "creating cluster..."
 	kind create cluster --name $(CLUSTER_NAME) --config ./deploy/clusters/kind-config.yaml
-	@echo "cluster deleted successfully"
+	@echo "cluster created successfully"
 
 .PHONY: apply-manifests
 apply-manifests:

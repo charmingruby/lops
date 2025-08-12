@@ -1,9 +1,10 @@
 fullnameOverride: "lops"
 nameOverride: "lops"
 
-appName: "lops"
-appType: "api"
-team: "platform"
+governanceData::
+  appName: "lops"
+  appType: "api"
+  team: "platform"
 
 podLabels:
 
