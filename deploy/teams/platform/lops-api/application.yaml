@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lops-api
+  namespace: argocd
+  labels:
+    appName: "lops"
+    appType: "api"
+    team: "platform"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/charmingruby/lops.git
+    targetRevision: HEAD
+    path: deploy/teams/platform/api
+    kustomize: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: platform-team
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - Validate=true
+    automated:
+      selfHeal: true
+      prune: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        maxDuration: 5m
+        factor: 2

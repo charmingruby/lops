@@ -14,41 +14,38 @@ create-cluster:
 	@echo "creating cluster..."
 	kind create cluster --name $(CLUSTER_NAME) --config ./deploy/clusters/kind-config.yaml
 	@echo "cluster created successfully"
-#	helm template api deploy/apps/api -f deploy/apps/api/values.yaml > deploy/apps/api/resources.yaml
 
 .PHONY: apply-manifests
-apply-manifests: 
-	@echo "applying application..."
+apply-manifests: apply-pre-manifests
+	@echo "applying Kustomize manifests..."
 	kubectl apply -k ./deploy
 	@echo "application manifests applied successfully"
 
+.PHONY: apply-pre-manifests
 apply-pre-manifests: apply-metrics-server apply-argocd
 
-.PHONY: generate-helm
-generate-helm:
-	@echo "Generating Helm chart YAML..."
-	helm template api ./deploy/apps/api -f ./deploy/apps/api/values.yaml > ./deploy/apps/api/resources.yaml
-	@echo "Helm YAML generated"
-
-.PHONY: apply-manifests
-apply-manifests: generate-helm
-	@echo "Applying Kustomize manifests..."
-	kubectl apply -k ./deploy
-	@echo "Application manifests applied successfully"
-
+.PHONY: apply-metrics-server
 apply-metrics-server:
-	@echo "applying metrics-server manifests..."
-	kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml && \
-	kubectl patch deploy metrics-server -n kube-system \
-	  --type=json \
-	  -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}, {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-preferred-address-types=InternalIP"}]'
-	@echo "metrics-server manifests applied"
+	@kubectl get deploy metrics-server -n kube-system >/dev/null 2>&1 && \
+		(echo "metrics-server already installed, skipping"; exit 0) || \
+		(echo "applying metrics-server manifests..." && \
+		kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml && \
+		kubectl patch deploy metrics-server -n kube-system \
+			--type=json \
+			-p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}, {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-preferred-address-types=InternalIP"}]' && \
+		echo "metrics-server manifests applied")
 
+.PHONY: apply-argocd
 apply-argocd:
-	@echo "applying argocd pre-requisites manifests..."
-	kubectl create namespace argocd && \
-	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-	@echo "argocd pre-requisites manifests applied"
+	@kubectl get ns argocd >/dev/null 2>&1 && \
+		(echo "argocd already installed, skipping"; exit 0) || \
+		(echo "applying argocd manifests..." && \
+		kubectl create namespace argocd && \
+		kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml && \
+		echo "argocd manifests applied")
 
+.PHONY: argo-pass
 argo-pass:
-	argocd admin initial-password -n argocd
+	@kubectl get ns argocd >/dev/null 2>&1 && \
+		argocd admin initial-password -n argocd || \
+		echo "argocd not installed in cluster"

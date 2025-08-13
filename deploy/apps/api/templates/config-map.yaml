@@ -1,8 +1,0 @@
-{{- if .Values.config.hasConfigMap }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-    name: {{ .Values.governanceData.appName }}-config-map
-data: 
-{{ toYaml .Values.config.configMapData | nindent 2 }}
-{{- end }}

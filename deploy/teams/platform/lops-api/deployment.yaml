@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lops-deployment
+  labels:
+    app_name: lops
+    app_type: api
+    team: platform
+spec:
+  selector:
+    matchLabels:
+      app_name: lops
+      app_type: api
+      team: platform
+  template:
+    metadata:
+      labels:
+        app_name: lops
+        app_type: api
+        team: platform
+        managed_by: kubernetes
+        chart: manual-deployment
+    spec:
+      containers:
+        - name: lops
+          image: "charmingruby/lops:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: lops-config-map
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health/live
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health/ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
