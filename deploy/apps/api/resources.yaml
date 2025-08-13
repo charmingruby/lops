@@ -1,0 +1,122 @@
+---
+# Source: api/templates/config-map.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: lops-config-map
+data: 
+
+  DUMMY_SECRET: some-secret
+  REST_SERVER_PORT: "3000"
+---
+# Source: api/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: lops-service
+  labels:
+    app_name: lops
+    app_type: api
+    team: platform
+    managed_by: helm
+    chart: api-0.1.0
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app_name: lops
+    app_type: api
+    team: platform
+---
+# Source: api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lops-deployment
+  labels:
+    app_name: lops
+    app_type: api
+    team: platform
+    managed_by: helm
+    chart: api-0.1.0
+spec:
+  selector:
+    matchLabels:
+      app_name: lops
+      app_type: api
+      team: platform
+  template:
+    metadata:
+      labels:
+        app_name: lops
+        app_type: api
+        team: platform
+    spec:
+      containers:
+        - name: api
+          image: "charmingruby/lops:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          envFrom:
+              - configMapRef:
+                  name: "lops-config-map"
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/v1/health/live
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/v1/health/ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+---
+# Source: api/templates/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: lops-hpa
+  labels:
+    app_name: lops
+    app_type: api
+    team: platform
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: lops
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70

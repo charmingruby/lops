@@ -2,7 +2,6 @@ CLUSTER_NAME?=lops
 
 .PHONY: setup-cluster
 setup-cluster: create-cluster apply-manifests
-# helm template base deploy/apps/base -f deploy/apps/lops/values.yaml > deploy/apps/lops/gen.yaml
 		
 .PHONY: teardown-cluster
 teardown-cluster:
@@ -19,7 +18,7 @@ create-cluster:
 .PHONY: apply-manifests
 apply-manifests: apply-pre-manifests
 	@echo "applying application..."
-	helm template api deploy/apps/api -f deploy/apps/api/values.yaml > deploy/apps/api/gen.yaml
+	helm template api deploy/apps/api -f deploy/apps/api/values.yaml > deploy/apps/api/resources.yaml
 	kubectl apply -k ./deploy
 	@echo "application manifests applied successfully"
 
