@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: platform-team
 
 resources:
-  - application.yaml
   - config-map.yaml
   - deployment.yaml
   - hpa.yaml
