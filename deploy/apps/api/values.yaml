@@ -1,4 +1,3 @@
-fullnameOverride: "lops"
 nameOverride: "lops"
 
 governanceData:

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-    name: api-application
+    name: lops-api
     namespace: argocd
     labels:
         appName: "lops"
@@ -16,7 +16,7 @@ spec:
         kustomize: {}
     destination:
         server: https://kubernetes.default.svc
-        namespace: api
+        namespace: lops-api
     syncPolicy:
         syncOptions:
             - CreateNamespace=true
