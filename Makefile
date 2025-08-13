@@ -14,15 +14,27 @@ create-cluster:
 	@echo "creating cluster..."
 	kind create cluster --name $(CLUSTER_NAME) --config ./deploy/clusters/kind-config.yaml
 	@echo "cluster created successfully"
+#	helm template api deploy/apps/api -f deploy/apps/api/values.yaml > deploy/apps/api/resources.yaml
 
 .PHONY: apply-manifests
-apply-manifests: apply-pre-manifests
+apply-manifests: 
 	@echo "applying application..."
-	helm template api deploy/apps/api -f deploy/apps/api/values.yaml > deploy/apps/api/resources.yaml
 	kubectl apply -k ./deploy
 	@echo "application manifests applied successfully"
 
 apply-pre-manifests: apply-metrics-server apply-argocd
+
+.PHONY: generate-helm
+generate-helm:
+	@echo "Generating Helm chart YAML..."
+	helm template api ./deploy/apps/api -f ./deploy/apps/api/values.yaml > ./deploy/apps/api/resources.yaml
+	@echo "Helm YAML generated"
+
+.PHONY: apply-manifests
+apply-manifests: generate-helm
+	@echo "Applying Kustomize manifests..."
+	kubectl apply -k ./deploy
+	@echo "Application manifests applied successfully"
 
 apply-metrics-server:
 	@echo "applying metrics-server manifests..."

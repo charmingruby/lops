@@ -3,5 +3,10 @@ kind: Kustomization
 
 namespace: lops-api
 
-resources:
-  - resources.yaml
+# resources:
+#   - resources.yaml
+
+helmCharts:
+  - name: api
+    path: .
+    valuesFile: values.yaml
