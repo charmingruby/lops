@@ -1,44 +1,44 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "base.name" -}}
+{{- define "api.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "base.chart" -}}
+{{- define "api.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Metadata 
 */}}
-{{- define "base.metadata" -}}
-{{ include "base.selectorLabels" . }}
+{{- define "api.metadata" -}}
+{{ include "api.selectorLabels" . }}
 managed_by: helm
-chart: {{ include "base.chart" . }}
+chart: {{ include "api.chart" . }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "base.labels" -}}
-{{ include "base.selectorLabels" . }}
+{{- define "api.labels" -}}
+{{ include "api.selectorLabels" . }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "base.selectorLabels" -}}
-{{ include "base.governanceLabels" . }}
+{{- define "api.selectorLabels" -}}
+{{ include "api.governanceLabels" . }}
 {{- end }}
 
 {{/*
 Governance Labels
 */}}
-{{- define "base.governanceLabels" -}}
+{{- define "api.governanceLabels" -}}
 app_name: {{ .Values.governanceData.appName }}
 app_type: {{ .Values.governanceData.appType }}
 team: {{ .Values.governanceData.team }}

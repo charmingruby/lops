@@ -1,12 +1,16 @@
 fullnameOverride: "lops"
 nameOverride: "lops"
 
-governanceData::
+governanceData:
   appName: "lops"
   appType: "api"
   team: "platform"
 
+podAnnotations:
+
 podLabels:
+
+replicaCount: 0
 
 autoscaling:
   enabled: true
@@ -20,8 +24,11 @@ image:
   tag: "latest"
   pullPolicy: "Always"
 
+imagePullSecrets: []
+
 service:
   port: 3000
+  type: NodePort
 
 config:
   hasConfigMap: true
