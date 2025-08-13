@@ -7,4 +7,5 @@ resources:
   - config-map.yaml
   - deployment.yaml
   - hpa.yaml
+  - ingress.yaml
   - service.yaml
